@@ -1,0 +1,14 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
+
+# Cron job for daily rate update (6 PM IST = 12:30 PM UTC)
+[[cron]]
+schedule = "30 12 * * *"
+command = "python scripts/daily_update.py"

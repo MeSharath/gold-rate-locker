@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ result.recommendation.value }} - Gold Investment Timing Optimizer</title>
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #FFD700;
+            --gold-dark: #B8860B;
+            --bg: #1a1a2e;
+            --card: #16213e;
+            --text: #eee;
+            --text-muted: #aaa;
+            --buy: #28a745;
+            --wait: #dc3545;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        h1 {
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .recommendation-box {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .recommendation-badge {
+            display: inline-block;
+            padding: 16px 48px;
+            font-size: 2rem;
+            font-weight: 700;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .recommendation-badge.buy {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        .recommendation-badge.wait {
+            background: linear-gradient(135deg, #dc3545, #e83e8c);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(220, 53, 69, 0.4);
+        }
+
+        .price-display {
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-bottom: 16px;
+        }
+
+        .reason {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .confidence {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-top: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .confidence.high {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+        }
+
+        .confidence.medium {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .confidence.low {
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 16px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .stat-value.positive {
+            color: #28a745;
+        }
+
+        .stat-value.negative {
+            color: #dc3545;
+        }
+
+        .stat-value.neutral {
+            color: var(--gold);
+        }
+
+        .phase-info {
+            text-align: center;
+            padding: 12px;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .phase-info span {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+            color: #000;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: var(--text);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .recommendation-badge {
+                font-size: 1.5rem;
+                padding: 12px 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Gold Investment Timing Optimizer</h1>
+        </header>
+
+        <div class="card">
+            <div class="recommendation-box">
+                <div class="recommendation-badge {{ result.recommendation.value|lower }}">
+                    {{ result.recommendation.value }}
+                </div>
+
+                <div class="price-display">
+                    Rs. {{ "%.2f"|format(result.price) }}/gram
+                </div>
+
+                <p class="reason">{{ result.reason }}</p>
+
+                <span class="confidence {{ result.confidence }}">
+                    {{ result.confidence }} confidence
+                </span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="phase-info">
+                <span>Phase {{ result.phase }}</span> - Day {{ result.day_of_month }} of the month
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-label">Your Price</div>
+                    <div class="stat-value neutral">Rs. {{ "%.2f"|format(result.price) }}</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">Reference Price</div>
+                    <div class="stat-value neutral">
+                        {% if result.reference_price %}
+                            Rs. {{ "%.2f"|format(result.reference_price) }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">vs Reference</div>
+                    {% if result.reference_price %}
+                        {% set diff = ((result.price - result.reference_price) / result.reference_price) * 100 %}
+                        <div class="stat-value {{ 'negative' if diff > 0 else 'positive' }}">
+                            {{ "%+.1f"|format(diff) }}%
+                        </div>
+                    {% else %}
+                        <div class="stat-value neutral">N/A</div>
+                    {% endif %}
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">vs Month Low</div>
+                    {% if result.month_low %}
+                        {% set diff = ((result.price - result.month_low) / result.month_low) * 100 %}
+                        <div class="stat-value {{ 'negative' if diff > 0 else 'positive' }}">
+                            {{ "%+.1f"|format(diff) }}%
+                        </div>
+                    {% else %}
+                        <div class="stat-value neutral">N/A</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <a href="/" class="btn btn-primary">Check Another Price</a>
+            <a href="/api/status" class="btn btn-secondary">View API Status</a>
+        </div>
+
+        <footer>
+            <p>Recommendation generated for {{ result.day_of_month }} {{ "January,February,March,April,May,June,July,August,September,October,November,December".split(",")[today.month - 1] }} {{ today.year }}</p>
+        </footer>
+    </div>
+</body>
+</html>

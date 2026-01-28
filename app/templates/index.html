@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gold Investment Timing Optimizer</title>
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #FFD700;
+            --gold-dark: #B8860B;
+            --bg: #1a1a2e;
+            --card: #16213e;
+            --text: #eee;
+            --text-muted: #aaa;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+        }
+
+        h1 {
+            background: linear-gradient(135deg, var(--gold), var(--gold-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .context-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .context-item {
+            text-align: center;
+            padding: 12px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+
+        .context-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .context-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        .phase-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+            color: #000;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .currency-prefix {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 16px 16px 16px 50px;
+            font-size: 1.2rem;
+            background: rgba(0,0,0,0.3);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            color: var(--text);
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        input[type="number"]::placeholder {
+            color: var(--text-muted);
+        }
+
+        .suffix {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .info-box {
+            background: rgba(212, 175, 55, 0.1);
+            border-left: 3px solid var(--gold);
+            padding: 16px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 20px;
+        }
+
+        .info-box h3 {
+            color: var(--gold);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .info-box p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        @media (max-width: 480px) {
+            .context-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Gold Investment Timing Optimizer</h1>
+            <p class="subtitle">Enter your jeweller's price for a personalized recommendation</p>
+        </header>
+
+        <div class="card">
+            <div style="text-align: center;">
+                <span class="phase-badge">
+                    Phase {{ context.phase }}: {{ context.phase_name }} (Day {{ context.day_of_month }})
+                </span>
+            </div>
+
+            <div class="context-grid">
+                <div class="context-item">
+                    <div class="context-label">Reference Price</div>
+                    <div class="context-value">
+                        {% if context.reference_price %}
+                            Rs. {{ "%.2f"|format(context.reference_price) }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="context-item">
+                    <div class="context-label">20-Day MA</div>
+                    <div class="context-value">
+                        {% if context.moving_average %}
+                            Rs. {{ "%.2f"|format(context.moving_average) }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="context-item">
+                    <div class="context-label">Month Low</div>
+                    <div class="context-value">
+                        {% if context.month_low %}
+                            Rs. {{ "%.2f"|format(context.month_low) }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="context-item">
+                    <div class="context-label">Latest IBJA+GST</div>
+                    <div class="context-value">
+                        {% if context.latest_ibja_rate %}
+                            Rs. {{ "%.2f"|format(context.latest_ibja_rate) }}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <form action="/check" method="POST">
+                <div class="form-group">
+                    <label for="price">Your Jeweller's Price (per gram)</label>
+                    <div class="input-wrapper">
+                        <span class="currency-prefix">Rs.</span>
+                        <input
+                            type="number"
+                            id="price"
+                            name="price"
+                            placeholder="7500"
+                            step="0.01"
+                            min="1000"
+                            max="50000"
+                            required
+                            autofocus
+                        >
+                    </div>
+                    <p class="suffix">916 gold (22K) with GST included</p>
+                </div>
+
+                <button type="submit">Get Recommendation</button>
+            </form>
+
+            <div class="info-box">
+                <h3>How It Works</h3>
+                <p>
+                    This tool uses a 3-phase adaptive strategy to help you time your monthly gold purchase.
+                    Enter the price quoted by your jeweller, and we'll compare it against IBJA reference rates
+                    and historical trends to give you a BUY or WAIT recommendation.
+                </p>
+            </div>
+        </div>
+
+        <footer>
+            <p>Data source: <a href="https://ibjarates.com" target="_blank">IBJA Rates</a></p>
+            <p>{{ context.days_remaining }} days remaining in {{ context.today.strftime('%B') }}</p>
+        </footer>
+    </div>
+</body>
+</html>
